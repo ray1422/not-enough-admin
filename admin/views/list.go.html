@@ -1,0 +1,96 @@
+{{define "list.go.html"}} {{template "base_top" .}} {{$model_base_path := .model_base_path}} {{$model_name := .model_name}} {{$filters := .filters}}
+<div class="col-12 ps-5 pt-4 mb-4">
+    <a href="{{$model_base_path}}" class="text-decoration-none">
+        <h1>{{ $model_name }}</h1>
+    </a>
+    <article>Here's the table of every {{ $model_name }}.</article>
+</div>
+
+<div class="col-12 ps-5 pe-5">
+    <!--Search Bar-->
+    <div class="col-12">
+        <button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#searchDetail" aria-expanded="false" aria-controls="searchDetail" style="font-weight: 500">
+        Search {{ $model_name }}
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-search"
+                viewBox="0 0 16 16"
+            >
+                <path
+                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
+                />
+            </svg>
+        </button>
+        <form>
+            <div class="container">
+                <div class="row collapse" id="searchDetail">
+                    <div class="col-12 align-items-center justify-content-start">
+                        <div class="col-12 p-2" id="tab-srch">
+
+                            <div class="row">
+                                {{range $filters}}
+                                <label class="form-check-label">{{.First}}</label>
+                                <div class="col-12 col-md-6 my-1">
+                                    <input class="form-control" placeholder="{{.First}}" type="text" name={{.First}} value="" />
+                                </div>
+                                {{end}}
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 m-1">
+                                <button type="submit" class="btn btn-outline-success rounded-pill">
+                                    Submit
+                                </button>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 m-1">
+                                <button type="reset" class="btn btn-outline-secondary rounded-pill">Reset
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!--End of Search Bar-->
+
+    <!--Table-->
+    <div class="col-12" style="overflow-x: auto">
+        <table class="table" id="postTable">
+            <thead>
+                <tr>
+                    {{range .fields}} {{$parts := splitList "." .}}
+                    <th title="{{ . }}">
+                        {{mustLast $parts}}
+                    </th>
+                    {{end}}
+                </tr>
+            </thead>
+            <tbody>
+                {{range .items}}
+                <tr>
+                    {{range $i, $v := .}}
+                    <td>
+                        {{if eq $i 0}}
+                        <a href="{{$model_base_path}}/{{$v}}"> {{$v}} </a> {{else}} {{$v}} {{end}}
+                    </td>
+                    {{end}}
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+    <!--End Table-->
+    <ul class="pagination justify-content-center mt-3">
+        {{ if .prev }}
+        <li class="page-item"><a class="page-link" href="{{ .prev_url }}">Previous</a></li>
+        {{end}} {{ if .next}}
+        <li class="page-item"><a class="page-link" href="{{ .next_url }}">Next</a></li>
+        {{end}}
+    </ul>
+</div>
+{{/* {{template "base_bottom" .}} */}} {{template "base_bottom" .}} {{end}}

@@ -1,0 +1,45 @@
+{{define "retrieve.go.html"}}
+{{template "base_top" .}}
+{{$model_base_path := .model_base_path}} {{$model_name := .model_name}}
+{{$base_url := .base_url}} {{$item_url := .item_url}}
+
+<!--Content-->
+<div class="container-md px-md-5 px-3">
+<form action="./" method="POST">
+    {{range $k, $v := .items}}
+    
+    <div class="row my-2">
+        <label for="form-{{$k}}" class="col-12 col-md-4 col-lg-3 col-form-label form-label fw-semibold">{{ $k }}</label>
+        <div class="col">
+        {{if eq $v.type "many"}}
+        <a href="{{$item_url}}/{{$v.value}}" target="_blank">{{$v.value}}</a>
+        {{else if eq $v.type "checkbox"}}
+            <div class="form-check">
+            <input id="form-{{$k}}" type="{{$v.type}}" class="form-check-input me-2" value="true"
+            {{if eq $v.value true }}
+            checked
+            {{end}}
+            name="{{ $k }}" />
+            <label class="form-check-label" for="form-{{$v.value}}">
+                {{$k}}
+            </label>
+        </div>
+        {{else}}
+            <input id="form-{{$k}}" type="{{$v.type}}" class="form-control me-2" value="{{ $v.value }}" name="{{ $k }}" />
+        
+        {{end}}
+        </div>
+
+
+    </div>
+    {{end}}
+    
+    <div class="row">
+        <div class="col-12">
+            <input type="submit" class="form-control my-5 btn btn-primary">
+        </div>
+    </div>
+</form>
+</div>
+{{template "base_bottom" .}}
+{{end}}
